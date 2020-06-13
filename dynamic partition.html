@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="js.js"></script>
+<link rel="stylesheet" type="text/css" href="css.css">
+</head>
+<body>
+<div class="margin5">
+  <form>
+    <fieldset>
+      <legend>控制台</legend>
+      请输入要申请的空间大小:<br>
+      <input type="text" id="allocate">
+      <button type="button" onClick="$allocate()">申请</button>
+      <br>
+      请输入要释放的空间大小:(此操作将释放所有占用空间等于指定值的内存区间)<br>
+      <input type="text" id="release">
+      <button type="button" onClick="$release()">释放</button>
+    </fieldset>
+  </form>
+</div>
+<div class="margin5">
+  <canvas id="myCanvas" width="800" height="150"></canvas>
+</div>
+<table id="table" class="float">
+</table>
+	<div class="float" id="work"></div>
+</body>
+</html>
