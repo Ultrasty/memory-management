@@ -74,6 +74,9 @@ function printTable() {
 	for (let [key, value] of map) {
 		document.getElementById("table").innerHTML += "<tr><td>" + key + "</td><td>" + value + "</td></tr>";
 	}
+	for(let [key,value] of map2){
+		document.getElementById("table2").innerHTML +="<tr><td>" + key + "</td><td>" + value + "</td></tr>";
+	}
 	//绘图1
 	var c = document.getElementById("myCanvas");
 	var cxt = c.getContext("2d");
@@ -194,8 +197,10 @@ function bestFitAlgorithm() {
 	if (map2.size == 0 && space <= maxSpace + 1) {
 		map2.set(0, space);
 		update();
+		document.getElementById("work2").innerHTML +="<br/>";
 		return 0;
 	}
+	let haveAlert=0;
 	let minSpace = 1000;
 	let bestPlace;
 	let index2 = 0;
@@ -221,14 +226,16 @@ function bestFitAlgorithm() {
 		index2 = (index2 + 1) % map2.size;
 		if (index2 == 0 && minSpace==1000) {
 			alert("内存不足");
-			document.getElementById("work2").innerHTML += " 被拒绝<br/>";
+			haveAlert=1;
+			document.getElementById("work2").innerHTML += " 被拒绝";
 			break;
 		}
 		else if(index2==0){
 			break;
 		}
 	}
-	map2.set(bestPlace,space);
+	if(haveAlert!=1)map2.set(bestPlace,space);
+	document.getElementById("work2").innerHTML +="<br/>";
 	update();
 	return 0;
 }
