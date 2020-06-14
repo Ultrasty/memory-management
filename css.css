@@ -8,3 +8,11 @@
 .margin5{
 	margin: 15px;
 }
+
+.border{
+	border:1px solid black;
+}
+
+.bg{
+	background: #eeeeee;
+}

@@ -2,7 +2,7 @@ var map = new Map(); //利用Map()新建一个分区表 key的值为起始地址
 var $index = 0; //因为要用到循环查找，所以要记录当前位置
 var arrayObj; //map对应的数组
 var maxSpace = 639; //可用内存空间的下标为0-639共640K
-var work=1;
+var work = 1;
 $sort();
 //给map排序
 function $sort() {
@@ -18,19 +18,19 @@ function $sort() {
 function $allocate() {
 	//打印log
 	//如果拒绝某次请求，会打印"被拒绝"
-	document.getElementById("work").innerHTML+="作业"+work+"申请"+document.getElementById("allocate").value+"K";
+	document.getElementById("work").innerHTML += "作业" + work + "申请" + document.getElementById("allocate").value + "K";
 	work++;
 	let start = $index;
 	let space = Number(document.getElementById("allocate").value);
 	//space不能为0
 	if (space == 0) { //不能为0
 		alert("不能为0或空");
-		document.getElementById("work").innerHTML+=" 被拒绝<br>";
+		document.getElementById("work").innerHTML += " 被拒绝<br/>";
 		return 0;
 	}
 	if (isNaN(space)) { //输入不能为非数字
 		alert("请输入数字类型的输入");
-		document.getElementById("work").innerHTML+=" 被拒绝<br>";
+		document.getElementById("work").innerHTML += " 被拒绝<br/>";
 		return 0;
 	}
 	while (1) {
@@ -40,23 +40,32 @@ function $allocate() {
 			map.set(0, space);
 			$sort();
 			printTable();
-			document.getElementById("work").innerHTML+="<br>";
+			document.getElementById("work").innerHTML += "<br/>";
 			return 0;
 		}
+		//如果当前指针为0但分区表第一项不是从0开始
+		if (map.size != 0 && $index == 0 && space <= arrayObj[0][0]) {
+			map.set(0, space);
+			$sort();
+			printTable();
+			document.getElementById("work").innerHTML += "<br/>";
+			return 0;
+		}
+
 		//如果分区表当前指针走到的位置是分区表最后一位且仍有足够空闲空间
-		else if (map.size != 0 && $index == map.size - 1 && (arrayObj[$index][0] + arrayObj[$index][1] + space - 1) <= maxSpace) {
+		if (map.size != 0 && $index == map.size - 1 && (arrayObj[$index][0] + arrayObj[$index][1] + space - 1) <= maxSpace) {
 			map.set(arrayObj[$index][0] + arrayObj[$index][1], space);
 			$sort();
 			printTable();
-			document.getElementById("work").innerHTML+="<br>";
+			document.getElementById("work").innerHTML += "<br/>";
 			return 0;
 		}
 		//如果分区表当前指针走到的位置不是分区表最后一位,且紧邻该分区存在空闲空间
-		else if (map.size != 0 && $index >= 0 && $index < map.size - 1 && (arrayObj[$index][0] + arrayObj[$index][1] + space - 1) <= arrayObj[$index + 1][0] - 1) {
+		if (map.size != 0 && $index >= 0 && $index < map.size - 1 && (arrayObj[$index][0] + arrayObj[$index][1] + space - 1) <= arrayObj[$index + 1][0] - 1) {
 			map.set(arrayObj[$index][0] + arrayObj[$index][1], space);
 			$sort();
 			printTable();
-			document.getElementById("work").innerHTML+="<br>";
+			document.getElementById("work").innerHTML += "<br/>";
 			return 0;
 		}
 		//当前指针所指分区表项的下一个邻接区间没有空闲空间，所以将指针指向下一项
@@ -64,7 +73,7 @@ function $allocate() {
 		//如果循环了一轮依然没有找到空闲空间，则无法插入
 		if ($index == start) {
 			alert("内存不足");
-			document.getElementById("work").innerHTML+=" 被拒绝<br>";
+			document.getElementById("work").innerHTML += " 被拒绝<br/>";
 			return 0;
 		}
 	}
@@ -72,15 +81,19 @@ function $allocate() {
 
 //释放空间
 function $release() {
-	let exist=false;
+	let exist = false;
 	for (let [key, value] of map) {
 		if (value == Number(document.getElementById("release").value)) {
-			exist=true;
+			exist = true;
 			map.delete(key);
 		}
 	}
 	//如果要删除的区间不存在则弹窗提示
-	if(exist==false)alert("区间大小为"+Number(document.getElementById("release").value)+"的区间不存在");
+	if (exist == false) {
+		alert("区间大小为" + Number(document.getElementById("release").value) + "的区间不存在");
+		document.getElementById("work").innerHTML += "申请释放" + Number(document.getElementById("release").value) + "K 但区间不存在<br/>";
+	} else
+		document.getElementById("work").innerHTML += "申请释放" + Number(document.getElementById("release").value) + "K<br/>";
 	$sort();
 	printTable();
 }
@@ -94,6 +107,14 @@ function printTable() {
 	//绘图
 	var c = document.getElementById("myCanvas");
 	var cxt = c.getContext("2d");
-	cxt.fillStyle = "#ffc800";
-	cxt.fillRect(0, 0, 150, 75);
+	cxt.fillStyle = "#808080";
+	cxt.fillRect(0, 0, 1280, 120);
+	cxt.fillStyle = "#ffc800"; //#808080
+	for (let [key, value] of map) {
+		cxt.fillRect(key * 2, 0, value * 2, 120);
+		cxt.strokeRect(key * 2, 0, value * 2, 120);
+	}
+	//cxt.fillRect(0, 0, 150, 120);
+	//cxt.strokeRect(0,0,149,120);
+	//cxt.clearRect(0,0,150,120);
 }
