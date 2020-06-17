@@ -1,18 +1,18 @@
 .float {
-	float: left;
-	margin: 15px;
-	padding: 0px;
-	width: 200px;
+    float: left;
+    margin: 15px;
+    padding: 0px;
+    width: 200px;
 }
 
-.margin5{
-	margin: 15px;
+.margin5 {
+    margin: 15px;
 }
 
-.border{
-	border:1px solid black;
+.border {
+    border: 1px solid black;
 }
 
-.bg{
-	background: #eeeeee;
+.bg {
+    background: #eeeeee;
 }
